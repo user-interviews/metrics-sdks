@@ -61,7 +61,7 @@ module Readme
           pass_through_body
         elsif form_urlencoded?
           form_urlencoded_body
-        elsif json?
+        elsif json? && @request.body.present?
           json_body
         else
           @request.body
