@@ -61,7 +61,7 @@ module Readme
           pass_through_body
         elsif form_urlencoded?
           form_urlencoded_body
-        elsif json?
+        elsif json? && body_is_present?
           json_body
         else
           @request.body
@@ -80,6 +80,10 @@ module Readme
       def json_body
         parsed_body = JSON.parse(@request.body)
         Har::Collection.new(@filter, parsed_body).to_h.to_json
+      end
+
+      def body_is_present?
+        @request.body && !@request.body.empty?
       end
 
       def form_urlencoded_body

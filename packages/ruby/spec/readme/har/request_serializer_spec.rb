@@ -72,6 +72,17 @@ RSpec.describe Readme::Har::RequestSerializer do
       expect(json).not_to have_key(:postData)
     end
 
+    it 'builds proper body when there is an empty string response body' do
+      http_request = build_http_request(content_type: 'application/json', body: '')
+
+      request = described_class.new(http_request)
+      json = request.as_json
+
+      expect(json).to have_key(:postData)
+      expect(json.dig(:postData, :mimeType)).to eq('application/json')
+      expect(json.dig(:postData, :text)).to eq('')
+    end
+
     it 'filters url-encoded body' do
       http_request = build_http_request(
         form_data?: true,
